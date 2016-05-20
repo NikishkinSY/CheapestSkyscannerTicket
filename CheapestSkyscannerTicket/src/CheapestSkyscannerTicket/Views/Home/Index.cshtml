@@ -1,4 +1,8 @@
-﻿<div ng-controller="TicketsController as tickets">
+﻿@{
+    Layout = "_Layout";
+}
+
+<div ng-controller="TicketsController as tickets" ng-init="tickets.getCurrency()">
     <div>Пункт отправления</div>
     <div>Пункт назначения</div>
     <div>Дата вылета</div>
