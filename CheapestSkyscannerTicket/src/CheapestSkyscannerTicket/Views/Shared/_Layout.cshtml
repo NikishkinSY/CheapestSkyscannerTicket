@@ -5,15 +5,28 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
 
+    @*libs*@
     <link href="~/lib/bootstrap/bootstrap.css" rel="stylesheet" />
 
     <script src="~/lib/angular/angular.js"></script>
     <script src="~/lib/bootstrap/bootstrap.js"></script>
     <script src="~/lib/jquery/jquery.js"></script>
 
+    @*angular*@
+    <script src="~/js/app/modules/skyscanner/module.js"></script>
+    <script src="~/js/app/modules/skyscanner/api.factory.js"></script>
+
+    <script src="~/js/app/modules/tickets/module.js"></script>
+    <script src="~/js/app/modules/tickets/controller.js"></script>
+
+    <script src="~/js/app/app.js"></script>
+
+    @*custom resources*@
+    <link href="~/css/layout.css" rel="stylesheet" />
+
 </head>
 <body>
-    <div>
+    <div ng-app="app">
         @RenderBody()
     </div>
 </body>

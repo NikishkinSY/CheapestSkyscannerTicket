@@ -4,7 +4,8 @@
     angular.module('app', [
         // Angular modules 
         // Custom modules 
-        'app.core',
+        'app.skyscanner',
+        'app.tickets'
         // 3rd Party Modules
     ]);
 })();
