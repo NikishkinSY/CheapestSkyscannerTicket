@@ -9,17 +9,7 @@
     TicketsController.$inject = ['skyscannerApi'];
 
     function TicketsController(skyscannerApi) {
-        var apiKey = 'te095065168589735671981266916440';
         var vm = this;
         vm.title = 'tickets';
-        vm.currency = [];
-
-        vm.getCurrency = function () {
-            skyscannerApi.getCurrency(apiKey)
-                .then(function (data) {
-                    vm.currency = data;
-                });
-        };
-
     }
 })();
