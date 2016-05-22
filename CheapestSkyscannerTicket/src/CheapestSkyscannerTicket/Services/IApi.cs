@@ -1,5 +1,4 @@
 ﻿using CheapestSkyscannerTicket.Services.DTO;
-using CheapestSkyscannerTicket.Services.DTO.MinPrice;
 using System.Collections.Generic;
 
 namespace CheapestSkyscannerTicket.Services

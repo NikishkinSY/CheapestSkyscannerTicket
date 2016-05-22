@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNet.Mvc;
-using CheapestSkyscannerTicket.Services.DTO.Places;
 using CheapestSkyscannerTicket.Services;
-using CheapestSkyscannerTicket.Services.DTO.Poll;
 using CheapestSkyscannerTicket.Services.DTO;
 using CheapestSkyscannerTicket.Services.DTO.MinPrice;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using RestSharp;
 using Newtonsoft.Json;
 using CheapestSkyscannerTicket.Services.DTO.Poll;
@@ -210,7 +209,7 @@ namespace CheapestSkyscannerTicket.Services
         /// <returns></returns>
         private PollDTO PollSession(string uri)
         {
-            Uri _uri = new Uri(uri);
+            Uri _uri = new Uri(uri+"asd");
             RestClient client = new RestClient(_uri.GetLeftPart(UriPartial.Authority));
             var request = new RestRequest(_uri.AbsolutePath, Method.GET);
             request.AddParameter("apiKey", apiKey);

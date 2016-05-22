@@ -8,7 +8,7 @@
     <form class="container" ng-submit="tickets.CheckInputData() && tickets.SearchCheapestTicket()" name="formSearchCheapestTicket">
         <div>
             <angucomplete-alt id="originPlace"
-                              placeholder="From"
+                              placeholder="Откуда"
                               pause="300"
                               minlength="1"
                               selected-object="tickets.originPlace"
@@ -17,7 +17,9 @@
                               input-class="form-control form-control-small"
                               match-class="highlight"
                               input-name="originPlace"
-                              field-required="true">
+                              field-required="true"
+                              text-searching="Поиск..."
+                              text-no-results="Нет совпадений">
             </angucomplete-alt>
 
             <div ng-messages="formSearchCheapestTicket.originPlace.$error">
@@ -31,7 +33,7 @@
         <div>
             <angucomplete-alt id="destinationPlace"
                               name="destinationPlace"
-                              placeholder="To"
+                              placeholder="Куда"
                               pause="300"
                               minlength="1"
                               selected-object="tickets.destinationPlace"
@@ -40,7 +42,9 @@
                               input-class="form-control form-control-small"
                               match-class="highlight"
                               input-name="destinationPlace"
-                              + field-required="true">
+                              field-required="true"
+                              text-searching="Поиск..."
+                              text-no-results="Нет совпадений">
             </angucomplete-alt>
             <div ng-messages="formSearchCheapestTicket.destinationPlace.$error">
                 <span class="postFormErrorMessage" ng-message="autocomplete-required">
@@ -50,7 +54,7 @@
         </div>
 
         <div>
-            <input class="form-control form-control-small" type="text" name="outboundDate" pick-a-date="date" placeholder="Select outbound date"
+            <input class="form-control form-control-small" type="text" name="outboundDate" pick-a-date="date" placeholder="Когда"
                    pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.outboundDate' required />
             <div ng-messages="formSearchCheapestTicket.outboundDate.$error">
                 <div class="postFormErrorMessage" ng-message="required">field is required</div>
@@ -58,7 +62,7 @@
         </div>
 
         <div>
-            <input class="form-control form-control-small" type="text" name="inboundDate" pick-a-date="date" placeholder="Select inbound date"
+            <input class="form-control form-control-small" type="text" name="inboundDate" pick-a-date="date" placeholder="Обратно"
                    pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.inboundDate' required />
             <div ng-messages="formSearchCheapestTicket.inboundDate.$error">
                 <div class="postFormErrorMessage" ng-message="required">field is required</div>
