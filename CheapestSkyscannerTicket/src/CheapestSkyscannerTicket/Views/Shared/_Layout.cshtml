@@ -6,10 +6,20 @@
     <title>@ViewBag.Title</title>
 
     @*libs*@
-    <link href="~/lib/bootstrap/bootstrap.css" rel="stylesheet" />
-
     <script src="~/lib/angular/angular.js"></script>
+    <link href="~/lib/angular/angucomplete-alt.css" rel="stylesheet" />
+    <script src="~/lib/angular/angucomplete-alt.js"></script>
+    <script src="~/lib/angular/angular-messages.js"></script>
+    <link href="~/lib/angular/datepicker/classic.css" rel="stylesheet" />
+    <link href="~/lib/angular/datepicker/classic.date.css" rel="stylesheet" />
+    <link href="~/lib/angular/datepicker/classic.time.css" rel="stylesheet" />
+    <script src="~/lib/angular/datepicker/angular-datepicker.js"></script>
+
+    <link href="~/lib/jquery-ui/jquery-ui.css" rel="stylesheet" />
     <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.js"></script>
+
+    <link href="~/lib/bootstrap/bootstrap.css" rel="stylesheet" />
     <script src="~/lib/bootstrap/bootstrap.js"></script>
 
     @*angular*@
@@ -23,11 +33,10 @@
 
     @*custom resources*@
     <link href="~/css/layout.css" rel="stylesheet" />
+    <script src="~/js/main.js"></script>
 
 </head>
-<body>
-    <div ng-app="app">
+<body ng-app="app">
         @RenderBody()
-    </div>
 </body>
 </html>

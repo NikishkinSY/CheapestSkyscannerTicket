@@ -14,8 +14,17 @@
         $http.defaults.useXDomain = true;
 
         var service = {
+            GetPlaces: GetPlaces
         };
 
+        function GetPlaces(query, config)
+        {
+            return $http({
+                url: "/api/skyscanner/places/" + query,
+                method: "GET",
+                config: config
+            })
+        }
 
         return service;
     }

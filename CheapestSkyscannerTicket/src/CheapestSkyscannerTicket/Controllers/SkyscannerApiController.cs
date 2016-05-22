@@ -10,6 +10,7 @@ using CheapestSkyscannerTicket.Services;
 
 namespace CheapestSkyscannerTicket.Controllers
 {
+    [Route("api/skyscanner")]
     public class SkyscannerApiController : Controller
     {
         private IApi api { get; set; }
@@ -18,9 +19,11 @@ namespace CheapestSkyscannerTicket.Controllers
             this.api = api;
         }
 
+        [HttpGet]
+        [Route("places/{query}")]
         public IEnumerable<Place> GetPlaces(string query)
         {
-            return null;
+            return api.GetPlaces(query);
         }
     }
 }
