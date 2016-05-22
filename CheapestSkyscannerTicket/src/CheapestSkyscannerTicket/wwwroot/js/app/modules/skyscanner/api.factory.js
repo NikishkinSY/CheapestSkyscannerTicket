@@ -14,7 +14,8 @@
         $http.defaults.useXDomain = true;
 
         var service = {
-            GetPlaces: GetPlaces
+            GetPlaces: GetPlaces,
+            GetCheapestTicket: GetCheapestTicket
         };
 
         function GetPlaces(query, config)
@@ -23,6 +24,13 @@
                 url: "/api/skyscanner/places/" + query,
                 method: "GET",
                 config: config
+            })
+        }
+
+        function GetCheapestTicket(query) {
+            return $http({
+                url: "/api/skyscanner/cheapestticket/" + query.originPlace + "/" + query.destinationPlace + "/" + query.outboundDate + "/" + query.inboundDate,
+                method: "GET"
             })
         }
 

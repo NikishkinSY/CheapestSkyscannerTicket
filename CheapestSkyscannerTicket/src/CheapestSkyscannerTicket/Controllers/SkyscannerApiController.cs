@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using CheapestSkyscannerTicket.Services.DTO.Places;
 using CheapestSkyscannerTicket.Services;
-
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using CheapestSkyscannerTicket.Services.DTO.Poll;
+using CheapestSkyscannerTicket.Services.DTO;
+using CheapestSkyscannerTicket.Services.DTO.MinPrice;
 
 namespace CheapestSkyscannerTicket.Controllers
 {
@@ -21,9 +22,16 @@ namespace CheapestSkyscannerTicket.Controllers
 
         [HttpGet]
         [Route("places/{query}")]
-        public IEnumerable<Place> GetPlaces(string query)
+        public IEnumerable<Services.DTO.Places.Place> GetPlaces(string query)
         {
             return api.GetPlaces(query);
+        }
+
+        [HttpGet]
+        [Route("cheapestticket/{originPlace}/{destinationPlace}/{outBoundDate}/{inBoundDate}")]
+        public Ticket GetCheapestTicket(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
+        {
+            return api.GetCheapestTicket(originPlace, destinationPlace, outBoundDate, inBoundDate);
         }
     }
 }

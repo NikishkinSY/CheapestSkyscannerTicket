@@ -4,64 +4,67 @@
 
 @**@
 
-<form ng-controller="TicketsController as tickets" ng-submit="tickets.query.originPlace && tickets.SearchCheapestTicket()" name="formSearchCheapestTicket">
-    <angucomplete-alt id="originPlace"
-        placeholder="Куда"
-        pause="300"
-        minlength="1"
-        selected-object="tickets.query.originPlace"
-        remote-api-handler="tickets.CustomSearch"
-        title-field="PlaceName"
-        input-class="form-control form-control-small"
-        match-class="highlight"
-        input-name="originPlace" 
-        field-required="true">
-    </angucomplete-alt>
-    <div ng-messages="formSearchCheapestTicket.originPlace.$error">
-        <span class="postFormErrorMessage" ng-message="autocomplete-required">
-            please enter your country
-        </span>
-    </div>
+<div ng-controller="TicketsController as tickets">
+    <form ng-submit="tickets.originPlace && tickets.SearchCheapestTicket()" name="formSearchCheapestTicket">
+        <div class="inline">
+            <angucomplete-alt id="originPlace"
+                              placeholder="From"
+                              pause="300"
+                              minlength="1"
+                              selected-object="tickets.originPlace"
+                              remote-api-handler="tickets.CustomSearch"
+                              title-field="PlaceName"
+                              input-class="form-control form-control-small"
+                              match-class="highlight"
+                              input-name="originPlace"
+                              field-required="true">
+            </angucomplete-alt>
+        </div>
 
-    <div angucomplete-alt id="destinationPlace"
-            name="destinationPlace"
-            placeholder="Откуда"
-            pause="300"
-            minlength="1"
-            selected-object="tickets.query.destinationPlace"
-            remote-api-handler="tickets.CustomSearch"
-            title-field="PlaceName"
-            input-class="form-control form-control-small"
-            match-class="highlight"
-            input-name="destinationPlace" 
-            field-required="true" 
-         ng-model="tickets.query.destinationPlace" required>
-    </div>
-    <div ng-messages="formSearchCheapestTicket.destinationPlace.$error">
-        <span class="postFormErrorMessage" ng-message="autocomplete-required">
-            please enter your country
-        </span>
-    </div>
 
-    <input type="text" name="outboundDate" pick-a-date="date" placeholder="Select Date" ng-model='tickets.query.outboundDate' required/> {{ date }}
-    <div ng-messages="formSearchCheapestTicket.outboundDate.$error">
-        <div class="modal-error" ng-message="required">This field is required</div>
+        <div class="inline">
+            <angucomplete-alt id="destinationPlace"
+                              name="destinationPlace"
+                              placeholder="To"
+                              pause="300"
+                              minlength="1"
+                              selected-object="tickets.destinationPlace"
+                              remote-api-handler="tickets.CustomSearch"
+                              title-field="PlaceName"
+                              input-class="form-control form-control-small"
+                              match-class="highlight">
+            </angucomplete-alt>
+        </div>
+
+        <div class="inline">
+            <input class="form-control form-control-small" type="text" name="outboundDate" pick-a-date="date" placeholder="Select outbound date"
+                   pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.outboundDate' />
+        </div>
+
+        <div class="inline">
+            <input class="form-control form-control-small" type="text" name="outboundDate" pick-a-date="date" placeholder="Select inbound date"
+                   pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.inboundDate' />
+        </div>
+
+        <div class="inline">
+            <input class="btn btn-primary button" type="submit" value="Search" />
+        </div>
+
+
+        <div ng-messages="formSearchCheapestTicket.originPlace.$error">
+            <span class="postFormErrorMessage" ng-message="autocomplete-required">
+                Origin place field is required
+            </span>
+        </div>
+    </form>
+
+    <div>
+        Цена: <label>{{tickets.cheapestTicket.Price}}</label>
+        1 <label>{{tickets.cheapestTicket.InboundAirline}}</label>
+        2 <label>{{tickets.cheapestTicket.InboundFlightNumber}}</label>
+        3 <label>{{tickets.cheapestTicket.InboundDateTime}}</label>
+        4 <label>{{tickets.cheapestTicket.InboundPlace}}</label>
     </div>
+</div>
 
-    <input type="text" name="outboundDate" pick-a-date="date" placeholder="Select Date" ng-model='tickets.query.inboundDate' required /> {{ date }}
-    <div ng-messages="formSearchCheapestTicket.inboundDate.$error">
-        <div class="modal-error" ng-message="required">This field is required</div>
-    </div>
 
-    @*<input class="form-control form-control-small" type="text" id="outboundDate" name="outboundDate" ng-model='tickets.query.outboundDate' required>
-    <div ng-messages="formSearchCheapestTicket.outboundDate.$error">
-        <div class="modal-error" ng-message="required">This field is required</div>
-    </div>
-
-    <input class="form-control form-control-small" type="text" id="inboundDate" name="inboundDate" ng-model='tickets.query.inboundDate' required>
-    <div ng-messages="formSearchCheapestTicket.inboundDate.$error">
-        <div class="modal-error" ng-message="required">This field is required</div>
-    </div>*@
-
-    <input class="btn btn-primary" type="submit" value="Search" />
-</form>

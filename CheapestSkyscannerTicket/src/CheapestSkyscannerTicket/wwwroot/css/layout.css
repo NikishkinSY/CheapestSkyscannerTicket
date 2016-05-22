@@ -2,3 +2,16 @@
     margin: 0 auto;
     width: 800px;
 }
+
+.inline{
+    display:inline-block;
+    padding-top: 20px;
+}
+
+.button{
+    height:100%;
+}
+
+.postFormErrorMessage{
+    color: red;
+}

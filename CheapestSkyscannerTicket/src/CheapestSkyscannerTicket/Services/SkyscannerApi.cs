@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using CheapestSkyscannerTicket.Services.DTO.Poll;
 using CheapestSkyscannerTicket.Services.DTO.Session;
 using CheapestSkyscannerTicket.Services.DTO.Places;
+using CheapestSkyscannerTicket.Services.DTO;
+using CheapestSkyscannerTicket.Services.DTO.MinPrice;
 
 namespace CheapestSkyscannerTicket.Services
 {
@@ -35,7 +37,58 @@ namespace CheapestSkyscannerTicket.Services
             return JsonConvert.DeserializeObject<PlacesDTO>(response.Content).Places;
         }
 
-        public string GetSession(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
+        public Ticket GetCheapestTicket(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
+        {
+            var rootObject = GetCheapestTicketByRoute(originPlace, destinationPlace, outBoundDate, inBoundDate);
+
+            Ticket ticket = null;
+            if (rootObject != null && rootObject.Quotes.Any())
+            {
+                var quote = rootObject.Quotes[0];
+                ticket = new Ticket();
+                ticket.Price = quote.MinPrice;
+                ticket.InboundDateTime = quote.InboundLeg.DepartureDate;
+
+                List<DTO.MinPrice.Carrier> Carriers = new List<DTO.MinPrice.Carrier>();
+                foreach (int carrierId in quote.InboundLeg.CarrierIds)
+                    Carriers.AddRange(rootObject.Carriers.Where(x => x.CarrierId == carrierId).ToArray());
+
+                ticket.InboundAirline = String.Join(", ", Carriers.Select(x => x.Name).ToArray());
+
+                var _originPlace = rootObject.Places.FirstOrDefault(x => x.PlaceId == quote.InboundLeg.OriginId);
+                if (_originPlace != null)
+                    ticket.InboundPlace = _originPlace.Name;
+
+                //var _destinationPlace = rootObject.Places.FirstOrDefault(x => x.PlaceId == quote.InboundLeg.DestinationId);
+                //if (_destinationPlace != null)
+                //    ticket. = _destinationPlace.Name;
+                
+
+
+
+            }
+            return ticket;
+        }
+
+        private RootObject GetCheapestTicketByRoute(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
+        {
+            var request = new RestRequest("/apiservices/browseroutes/v1.0" + String.Format("/{0}/{1}/{2}/{3}/{4}/{5}/{6}", Country, Currency, Locale, originPlace, destinationPlace, outBoundDate, inBoundDate), Method.GET);
+            request.AddParameter("apiKey", apiKey);
+
+            IRestResponse response = Client.Execute(request);
+            return JsonConvert.DeserializeObject<RootObject>(response.Content);
+        }
+
+        private RootObject GetCheapestTicketByDate(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
+        {
+            var request = new RestRequest("/apiservices/browsedates/v1.0" + String.Format("/{0}/{1}/{2}/{3}/{4}/{5}/{6}", Country, Currency, Locale, originPlace, destinationPlace, outBoundDate, inBoundDate), Method.GET);
+            request.AddParameter("apiKey", apiKey);
+
+            IRestResponse response = Client.Execute(request);
+            return JsonConvert.DeserializeObject<RootObject>(response.Content);
+        }
+
+        private string GetSession(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
         {
             var request = new RestRequest("/apiservices/pricing/v1.0", Method.POST);
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -57,7 +110,7 @@ namespace CheapestSkyscannerTicket.Services
             return response.Headers.FirstOrDefault(x => x.Name == "Location").Value.ToString();
         }
 
-        public PollDTO PollSession(string uri)
+        private PollDTO PollSession(string uri)
         {
             Uri _uri = new Uri(uri);
             RestClient client = new RestClient(_uri.GetLeftPart(UriPartial.Authority));

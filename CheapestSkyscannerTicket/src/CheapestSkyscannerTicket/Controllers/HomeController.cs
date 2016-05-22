@@ -14,9 +14,6 @@ namespace CheapestSkyscannerTicket.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            SkyscannerApi api = new SkyscannerApi();
-            var uri = api.GetSession("MOSC-sky", "LED-sky", "2016-05-23", "2016-05-25");
-            api.PollSession(uri);
             return View();
         }
     }
