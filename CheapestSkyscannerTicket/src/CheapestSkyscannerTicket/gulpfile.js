@@ -17,9 +17,6 @@ var itemsToCopy = {
     './node_modules/bootstrap/dist/js/bootstrap.js': paths.webroot + 'lib/bootstrap',
 
     './node_modules/jquery/dist/jquery.js': paths.webroot + 'lib/jquery',
-
-    './node_modules/jquery-ui-1-11-4/jquery-ui.js': paths.webroot + 'lib/jquery-ui',
-    './node_modules/jquery-ui-1-11-4/jquery-ui.css': paths.webroot + 'lib/jquery-ui',
 };
 
 gulp.task('copy', function () {

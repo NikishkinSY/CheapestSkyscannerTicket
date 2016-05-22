@@ -15,8 +15,12 @@ namespace CheapestSkyscannerTicket.Services.DTO.Poll
         [JsonProperty("OutboundLegId")]
         public string OutboundLegId { get; set; }
 
+        public Leg OutboundLeg { get; set; }
+
         [JsonProperty("InboundLegId")]
         public string InboundLegId { get; set; }
+        
+        public Leg InboundLeg { get; set; }
 
         [JsonProperty("PricingOptions")]
         public PricingOption[] PricingOptions { get; set; }

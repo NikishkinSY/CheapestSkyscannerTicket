@@ -5,8 +5,8 @@
 @**@
 
 <div ng-controller="TicketsController as tickets">
-    <form ng-submit="tickets.originPlace && tickets.SearchCheapestTicket()" name="formSearchCheapestTicket">
-        <div class="inline">
+    <form class="container" ng-submit="tickets.CheckInputData() && tickets.SearchCheapestTicket()" name="formSearchCheapestTicket">
+        <div>
             <angucomplete-alt id="originPlace"
                               placeholder="From"
                               pause="300"
@@ -19,10 +19,16 @@
                               input-name="originPlace"
                               field-required="true">
             </angucomplete-alt>
+
+            <div ng-messages="formSearchCheapestTicket.originPlace.$error">
+                <span class="postFormErrorMessage" ng-message="autocomplete-required">
+                    field is required
+                </span>
+            </div>
         </div>
 
 
-        <div class="inline">
+        <div>
             <angucomplete-alt id="destinationPlace"
                               name="destinationPlace"
                               placeholder="To"
@@ -32,39 +38,39 @@
                               remote-api-handler="tickets.CustomSearch"
                               title-field="PlaceName"
                               input-class="form-control form-control-small"
-                              match-class="highlight">
+                              match-class="highlight"
+                              input-name="destinationPlace"
+                              + field-required="true">
             </angucomplete-alt>
+            <div ng-messages="formSearchCheapestTicket.destinationPlace.$error">
+                <span class="postFormErrorMessage" ng-message="autocomplete-required">
+                    field is required
+                </span>
+            </div>
         </div>
 
-        <div class="inline">
+        <div>
             <input class="form-control form-control-small" type="text" name="outboundDate" pick-a-date="date" placeholder="Select outbound date"
-                   pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.outboundDate' />
+                   pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.outboundDate' required />
+            <div ng-messages="formSearchCheapestTicket.outboundDate.$error">
+                <div class="postFormErrorMessage" ng-message="required">field is required</div>
+            </div>
         </div>
 
-        <div class="inline">
-            <input class="form-control form-control-small" type="text" name="outboundDate" pick-a-date="date" placeholder="Select inbound date"
-                   pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.inboundDate' />
+        <div>
+            <input class="form-control form-control-small" type="text" name="inboundDate" pick-a-date="date" placeholder="Select inbound date"
+                   pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.inboundDate' required />
+            <div ng-messages="formSearchCheapestTicket.inboundDate.$error">
+                <div class="postFormErrorMessage" ng-message="required">field is required</div>
+            </div>
         </div>
 
-        <div class="inline">
-            <input class="btn btn-primary button" type="submit" value="Search" />
-        </div>
-
-
-        <div ng-messages="formSearchCheapestTicket.originPlace.$error">
-            <span class="postFormErrorMessage" ng-message="autocomplete-required">
-                Origin place field is required
-            </span>
+        <div>
+            <input class="btn btn-primary" type="submit" value="Search" />
         </div>
     </form>
 
-    <div>
-        Цена: <label>{{tickets.cheapestTicket.Price}}</label>
-        1 <label>{{tickets.cheapestTicket.InboundAirline}}</label>
-        2 <label>{{tickets.cheapestTicket.InboundFlightNumber}}</label>
-        3 <label>{{tickets.cheapestTicket.InboundDateTime}}</label>
-        4 <label>{{tickets.cheapestTicket.InboundPlace}}</label>
-    </div>
+    @Html.Partial("~/views/home/ticket.cshtml")
 </div>
 
 

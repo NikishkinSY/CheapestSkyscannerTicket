@@ -9,14 +9,20 @@ namespace CheapestSkyscannerTicket.Services.DTO
     {
         public double Price { get; set; }
 
-        public string InboundAirline { get; set; }
-        public string InboundFlightNumber { get; set; }
-        public string InboundDateTime { get; set; }
-        public string InboundPlace { get; set; }
+        public string InboundAirlines { get; set; }
+        public string InboundFlightNumbers { get; set; }
+        public string InboundArrivalDateTime { get; set; }
+        public string InboundDepartureDateTime { get; set; }
+        public string InboundOriginPlace { get; set; }
+        public string InboundDestinationPlace { get; set; }
+        public int InboundDuration { get; set; }
 
-        public string OutboundAirline { get; set; }
-        public string OutboundFlightNumber { get; set; }
-        public string OutboundDateTime { get; set; }
-        public string OutboundPlace { get; set; }
+        public string OutboundAirlines { get; set; }
+        public string OutboundFlightNumbers { get; set; }
+        public string OutboundArrivalDateTime { get; set; }
+        public string OutboundDepartureDateTime { get; set; }
+        public string OutboundOriginPlace { get; set; }
+        public string OutboundDestinationPlace { get; set; }
+        public int OutboundDuration { get; set; }
     }
 }

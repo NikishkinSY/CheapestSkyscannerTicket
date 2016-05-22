@@ -1,15 +1,15 @@
 ﻿body {
     margin: 0 auto;
-    width: 800px;
+    width: 1000px;
 }
 
-.inline{
-    display:inline-block;
-    padding-top: 20px;
+.container{
+    display: flex;
+    padding: 50px 0;
 }
 
-.button{
-    height:100%;
+.container div {
+    flex: 1;
 }
 
 .postFormErrorMessage{

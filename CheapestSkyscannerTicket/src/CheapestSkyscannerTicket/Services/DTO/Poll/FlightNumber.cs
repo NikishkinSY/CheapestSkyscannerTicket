@@ -17,6 +17,8 @@ namespace CheapestSkyscannerTicket.Services.DTO.Poll
 
         [JsonProperty("CarrierId")]
         public int CarrierId { get; set; }
+
+        public Carrier Carrier { get; set; }
     }
 
 }

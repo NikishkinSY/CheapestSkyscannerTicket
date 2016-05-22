@@ -18,8 +18,12 @@ namespace CheapestSkyscannerTicket.Services.DTO.Poll
         [JsonProperty("OriginStation")]
         public int OriginStation { get; set; }
 
+        public Place OriginPlace { get; set; }
+
         [JsonProperty("DestinationStation")]
         public int DestinationStation { get; set; }
+
+        public Place DestinationPlace { get; set; }
 
         [JsonProperty("DepartureDateTime")]
         public string DepartureDateTime { get; set; }
@@ -30,8 +34,12 @@ namespace CheapestSkyscannerTicket.Services.DTO.Poll
         [JsonProperty("Carrier")]
         public int Carrier { get; set; }
 
+        public Carrier _Carrier { get; set; }
+
         [JsonProperty("OperatingCarrier")]
         public int OperatingCarrier { get; set; }
+
+        public Carrier _OperatingCarrier { get; set; }
 
         [JsonProperty("Duration")]
         public int Duration { get; set; }

@@ -27,6 +27,11 @@ namespace CheapestSkyscannerTicket.Services
             this.Client = new RestClient(Url);
         }
 
+        /// <summary>
+        /// Get 10 matching query places
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public IEnumerable<DTO.Places.Place> GetPlaces(string query)
         {
             var request = new RestRequest("/apiservices/autosuggest/v1.0" + String.Format("/{0}/{1}/{2}", Country, Currency, Locale), Method.GET);
@@ -37,39 +42,98 @@ namespace CheapestSkyscannerTicket.Services
             return JsonConvert.DeserializeObject<PlacesDTO>(response.Content).Places;
         }
 
+        /// <summary>
+        /// Get cheapest ticket
+        /// </summary>
+        /// <param name="originPlace"></param>
+        /// <param name="destinationPlace"></param>
+        /// <param name="outBoundDate"></param>
+        /// <param name="inBoundDate"></param>
+        /// <returns></returns>
         public Ticket GetCheapestTicket(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
         {
-            var rootObject = GetCheapestTicketByRoute(originPlace, destinationPlace, outBoundDate, inBoundDate);
-
-            Ticket ticket = null;
-            if (rootObject != null && rootObject.Quotes.Any())
+            string session;
+            if (GetSession(originPlace, destinationPlace, outBoundDate, inBoundDate, out session))
             {
-                var quote = rootObject.Quotes[0];
-                ticket = new Ticket();
-                ticket.Price = quote.MinPrice;
-                ticket.InboundDateTime = quote.InboundLeg.DepartureDate;
+                var poll = PollSession(session);
 
-                List<DTO.MinPrice.Carrier> Carriers = new List<DTO.MinPrice.Carrier>();
-                foreach (int carrierId in quote.InboundLeg.CarrierIds)
-                    Carriers.AddRange(rootObject.Carriers.Where(x => x.CarrierId == carrierId).ToArray());
+                foreach (Itinerary itinerary in poll.Itineraries)
+                {
+                    itinerary.InboundLeg = poll.Legs.FirstOrDefault(x => x.Id == itinerary.InboundLegId);
+                    itinerary.OutboundLeg = poll.Legs.FirstOrDefault(x => x.Id == itinerary.OutboundLegId);
+                }
 
-                ticket.InboundAirline = String.Join(", ", Carriers.Select(x => x.Name).ToArray());
+                foreach (Segment segment in poll.Segments)
+                {
+                    segment._Carrier = poll.Carriers.FirstOrDefault(x => x.Id == segment.Carrier);
+                    segment._OperatingCarrier = poll.Carriers.FirstOrDefault(x => x.Id == segment.OperatingCarrier);
+                    segment.OriginPlace = poll.Places.FirstOrDefault(x => x.Id == segment.OriginStation);
+                    segment.DestinationPlace = poll.Places.FirstOrDefault(x => x.Id == segment.DestinationStation);
+                }
 
-                var _originPlace = rootObject.Places.FirstOrDefault(x => x.PlaceId == quote.InboundLeg.OriginId);
-                if (_originPlace != null)
-                    ticket.InboundPlace = _originPlace.Name;
+                foreach (Leg leg in poll.Legs)
+                {
+                    leg.DestinationPlace = poll.Places.FirstOrDefault(x => x.Id == leg.DestinationStation);
+                    leg.OriginPlace = poll.Places.FirstOrDefault(x => x.Id == leg.OriginStation);
 
-                //var _destinationPlace = rootObject.Places.FirstOrDefault(x => x.PlaceId == quote.InboundLeg.DestinationId);
-                //if (_destinationPlace != null)
-                //    ticket. = _destinationPlace.Name;
-                
+                    leg.Segments = new List<Segment>();
+                    foreach (int segment in leg.SegmentIds)
+                        leg.Segments.Add(poll.Segments.FirstOrDefault(x => x.Id == segment));
 
+                    leg._OperatingCarriers = new List<DTO.Poll.Carrier>();
+                    foreach (int operatingCarrier in leg.OperatingCarriers)
+                        leg._OperatingCarriers.Add(poll.Carriers.FirstOrDefault(x => x.Id == operatingCarrier));
 
+                    leg._Carriers = new List<DTO.Poll.Carrier>();
+                    foreach (int carrier in leg.Carriers)
+                        leg._Carriers.Add(poll.Carriers.FirstOrDefault(x => x.Id == carrier));
 
+                    foreach (FlightNumber flightNumber in leg.FlightNumbers)
+                        flightNumber.Carrier = poll.Carriers.FirstOrDefault(x => x.Id == flightNumber.CarrierId);
+                }
+
+                if (poll.Itineraries.Any())
+                {
+                    Itinerary itinerary = poll.Itineraries.First();
+                    Ticket ticket = new Ticket();
+                    ticket.Price = itinerary.PricingOptions.First().Price;
+
+                    if (itinerary.InboundLeg != null)
+                    {
+                        ticket.InboundAirlines = string.Join(", ", itinerary.InboundLeg._Carriers.Select(x => x.Name).ToList());
+                        ticket.InboundDepartureDateTime = itinerary.InboundLeg.Departure;
+                        ticket.InboundArrivalDateTime = itinerary.InboundLeg.Arrival;
+                        ticket.InboundDestinationPlace = itinerary.InboundLeg.DestinationPlace.Name;
+                        ticket.InboundOriginPlace = itinerary.InboundLeg.OriginPlace.Name;
+                        ticket.InboundFlightNumbers = string.Join(", ", itinerary.InboundLeg.FlightNumbers.Select(x => x._FlightNumber).ToList());
+                        ticket.InboundDuration = itinerary.InboundLeg.Duration;
+                    }
+
+                    if (itinerary.OutboundLeg != null)
+                    {
+                        ticket.OutboundAirlines = string.Join(", ", itinerary.OutboundLeg._Carriers.Select(x => x.Name).ToList());
+                        ticket.OutboundDepartureDateTime = itinerary.OutboundLeg.Departure;
+                        ticket.OutboundArrivalDateTime = itinerary.OutboundLeg.Arrival;
+                        ticket.OutboundDestinationPlace = itinerary.OutboundLeg.DestinationPlace.Name;
+                        ticket.OutboundOriginPlace = itinerary.OutboundLeg.OriginPlace.Name;
+                        ticket.OutboundFlightNumbers = string.Join(", ", itinerary.OutboundLeg.FlightNumbers.Select(x => x._FlightNumber).ToList());
+                        ticket.OutboundDuration = itinerary.OutboundLeg.Duration;
+                    }
+
+                    return ticket;
+                }
             }
-            return ticket;
+            return null;
         }
 
+        /// <summary>
+        /// Get tickets from skyscanner cache
+        /// </summary>
+        /// <param name="originPlace"></param>
+        /// <param name="destinationPlace"></param>
+        /// <param name="outBoundDate"></param>
+        /// <param name="inBoundDate"></param>
+        /// <returns></returns>
         private RootObject GetCheapestTicketByRoute(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
         {
             var request = new RestRequest("/apiservices/browseroutes/v1.0" + String.Format("/{0}/{1}/{2}/{3}/{4}/{5}/{6}", Country, Currency, Locale, originPlace, destinationPlace, outBoundDate, inBoundDate), Method.GET);
@@ -79,6 +143,14 @@ namespace CheapestSkyscannerTicket.Services
             return JsonConvert.DeserializeObject<RootObject>(response.Content);
         }
 
+        /// <summary>
+        /// Get tickets from skyscanner cache
+        /// </summary>
+        /// <param name="originPlace"></param>
+        /// <param name="destinationPlace"></param>
+        /// <param name="outBoundDate"></param>
+        /// <param name="inBoundDate"></param>
+        /// <returns></returns>
         private RootObject GetCheapestTicketByDate(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
         {
             var request = new RestRequest("/apiservices/browsedates/v1.0" + String.Format("/{0}/{1}/{2}/{3}/{4}/{5}/{6}", Country, Currency, Locale, originPlace, destinationPlace, outBoundDate, inBoundDate), Method.GET);
@@ -88,8 +160,18 @@ namespace CheapestSkyscannerTicket.Services
             return JsonConvert.DeserializeObject<RootObject>(response.Content);
         }
 
-        private string GetSession(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate)
+        /// <summary>
+        /// Get skyscanner session
+        /// </summary>
+        /// <param name="originPlace"></param>
+        /// <param name="destinationPlace"></param>
+        /// <param name="outBoundDate"></param>
+        /// <param name="inBoundDate"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        private bool GetSession(string originPlace, string destinationPlace, string outBoundDate, string inBoundDate, out string session)
         {
+            session = string.Empty;
             var request = new RestRequest("/apiservices/pricing/v1.0", Method.POST);
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddHeader("Accept", "application/json");
@@ -107,9 +189,25 @@ namespace CheapestSkyscannerTicket.Services
             });
             
             IRestResponse response = Client.Execute(request);
-            return response.Headers.FirstOrDefault(x => x.Name == "Location").Value.ToString();
+            var header = response.Headers.FirstOrDefault(x => x.Name == "Location");
+            if (header != null)
+            {
+                session = header.Value.ToString();
+                return true;
+            }
+            else
+                return false;
         }
 
+        /// <summary>
+        /// Poll skyscanner session
+        /// </summary>
+        /// <param name="originPlace"></param>
+        /// <param name="destinationPlace"></param>
+        /// <param name="outBoundDate"></param>
+        /// <param name="inBoundDate"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
         private PollDTO PollSession(string uri)
         {
             Uri _uri = new Uri(uri);
