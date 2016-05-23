@@ -13,6 +13,11 @@ var itemsToCopy = {
     './node_modules/angucomplete-alt/angucomplete-alt.js': paths.webroot + 'lib/angular',
     './node_modules/angucomplete-alt/angucomplete-alt.css': paths.webroot + 'lib/angular',
 
+    './node_modules/angular-material/angular-material.js': paths.webroot + 'lib/angular',
+    './node_modules/angular-material/angular-material.css': paths.webroot + 'lib/angular',
+    './node_modules/angular-aria/angular-aria.js': paths.webroot + 'lib/angular',
+    './node_modules/angular-animate/angular-animate.js': paths.webroot + 'lib/angular',
+
     './node_modules/bootstrap/dist/css/bootstrap.css': paths.webroot + 'lib/bootstrap',
     './node_modules/bootstrap/dist/js/bootstrap.js': paths.webroot + 'lib/bootstrap',
 

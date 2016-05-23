@@ -2,11 +2,9 @@
     Layout = "_Layout";
 }
 
-@**@
-
 <div ng-controller="TicketsController as tickets">
-    <form class="container" ng-submit="tickets.CheckInputData() && tickets.SearchCheapestTicket()" name="formSearchCheapestTicket">
-        <div>
+    <form class="filter-container" ng-submit="tickets.CheckInputData() && tickets.SearchCheapestTicket()" name="formSearchCheapestTicket">
+        <div class="">
             <angucomplete-alt id="originPlace"
                               placeholder="Откуда"
                               pause="300"
@@ -23,8 +21,8 @@
             </angucomplete-alt>
 
             <div ng-messages="formSearchCheapestTicket.originPlace.$error">
-                <span class="postFormErrorMessage" ng-message="autocomplete-required">
-                    field is required
+                <span class="post-form-error-message" ng-message="autocomplete-required">
+                    необходимо заполнить
                 </span>
             </div>
         </div>
@@ -47,30 +45,30 @@
                               text-no-results="Нет совпадений">
             </angucomplete-alt>
             <div ng-messages="formSearchCheapestTicket.destinationPlace.$error">
-                <span class="postFormErrorMessage" ng-message="autocomplete-required">
-                    field is required
+                <span class="post-form-error-message" ng-message="autocomplete-required">
+                    необходимо заполнить
                 </span>
             </div>
         </div>
 
         <div>
-            <input class="form-control form-control-small" type="text" name="outboundDate" pick-a-date="date" placeholder="Когда"
-                   pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.outboundDate' required />
+            <md-datepicker name="outboundDate" ng-model="tickets.outboundDate" md-min-date="tickets.dateTimeNow" md-max-date="tickets.inboundDate" ng-required="true" md-placeholder="Когда"></md-datepicker>
             <div ng-messages="formSearchCheapestTicket.outboundDate.$error">
-                <div class="postFormErrorMessage" ng-message="required">field is required</div>
+                <div class="post-form-error-message" ng-message="required">необходимо заполнить</div>
             </div>
         </div>
 
         <div>
-            <input class="form-control form-control-small" type="text" name="inboundDate" pick-a-date="date" placeholder="Обратно"
-                   pick-a-date-options="{ format: 'yyyy-mm-dd' }" ng-model='tickets.inboundDate' required />
+            <md-datepicker name="inboundDate" ng-model="tickets.inboundDate" md-min-date="tickets.outboundDate" ng-required="true" md-placeholder="Обратно"></md-datepicker>
             <div ng-messages="formSearchCheapestTicket.inboundDate.$error">
-                <div class="postFormErrorMessage" ng-message="required">field is required</div>
+                <div class="post-form-error-message" ng-message="required">необходимо заполнить</div>
             </div>
         </div>
 
         <div>
-            <input class="btn btn-primary" type="submit" value="Search" />
+            <md-button type="submit" class="md-fab" aria-label="FAB">
+                <md-icon md-svg-src="img/plus.svg"></md-icon>
+            </md-button>
         </div>
     </form>
 

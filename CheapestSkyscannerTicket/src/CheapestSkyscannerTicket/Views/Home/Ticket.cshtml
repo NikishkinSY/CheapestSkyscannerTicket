@@ -1,28 +1,25 @@
-﻿<div>
-    <div>
+﻿<div style="{{tickets.ticketVisible}}">
+    <div class="route-price">
         Цена: <label>{{tickets.cheapestTicket.Price}}</label>
     </div>
-    <div class="container">
-        <div>
-            Туда
-            <div>Место отправления: <label>{{tickets.cheapestTicket.OutboundOriginPlace}}</label></div>
-            <div>Место прибытия: <label>{{tickets.cheapestTicket.OutboundDestinationPlace}}</label></div>
-            <div>Время отправления: <label>{{tickets.cheapestTicket.OutboundDepartureDateTime}}</label></div>
-            <div>Время прибытия: <label>{{tickets.cheapestTicket.OutboundArrivalDateTime}}</label></div>
-            <div>Авиалинии: <label>{{tickets.cheapestTicket.OutboundAirlines}}</label></div>
-            <div>Номера рейсов: <label>{{tickets.cheapestTicket.OutboundFlightNumbers}}</label> </div>
-            <div>Длительность: <label>{{tickets.cheapestTicket.OutboundDuration}}</label> </div>
+        <div class="route-container">
+            <div class="route-item" md-whiteframe="3">
+                <div>Место отправления: <label>{{tickets.cheapestTicket.OutboundLeg.OriginPlace}}</label></div>
+                <div>Место прибытия: <label>{{tickets.cheapestTicket.OutboundLeg.DestinationPlace}}</label></div>
+                <div>Время отправления: <label>{{tickets.cheapestTicket.OutboundLeg.Departure}}</label></div>
+                <div>Время прибытия: <label>{{tickets.cheapestTicket.OutboundLeg.Arrival}}</label></div>
+                <div>Авиалинии: <label>{{tickets.cheapestTicket.OutboundLeg.Airlines}}</label></div>
+                <div>Номера рейсов: <label>{{tickets.cheapestTicket.OutboundLeg.FlightNumbers}}</label> </div>
+                <div>Длительность: <label>{{tickets.cheapestTicket.OutboundLeg.Duration}}</label> </div>
+            </div>
+            <div class="route-item" md-whiteframe="3">
+                <div>Место отправления: <label>{{tickets.cheapestTicket.InboundLeg.OriginPlace}}</label></div>
+                <div>Место прибытия: <label>{{tickets.cheapestTicket.InboundLeg.DestinationPlace}}</label></div>
+                <div>Время отправления: <label>{{tickets.cheapestTicket.InboundLeg.Departure}}</label></div>
+                <div>Время прибытия: <label>{{tickets.cheapestTicket.InboundLeg.Arrival}}</label></div>
+                <div>Авиалинии: <label>{{tickets.cheapestTicket.InboundLeg.Airlines}}</label></div>
+                <div>Номера рейсов: <label>{{tickets.cheapestTicket.InboundLeg.FlightNumbers}}</label> </div>
+                <div>Длительность: <label>{{tickets.cheapestTicket.InboundLeg.Duration}}</label> </div>
+            </div>
         </div>
-        <div>
-            Обратно
-            <div>Место отправления: <label>{{tickets.cheapestTicket.InboundOriginPlace}}</label></div>
-            <div>Место прибытия: <label>{{tickets.cheapestTicket.InboundDestinationPlace}}</label></div>
-            <div>Время отправления: <label>{{tickets.cheapestTicket.InboundDepartureDateTime}}</label></div>
-            <div>Время прибытия: <label>{{tickets.cheapestTicket.InboundArrivalDateTime}}</label></div>
-            <div>Авиалинии: <label>{{tickets.cheapestTicket.InboundAirlines}}</label></div>
-            <div>Номера рейсов: <label>{{tickets.cheapestTicket.InboundFlightNumbers}}</label> </div>
-            <div>Длительность: <label>{{tickets.cheapestTicket.InboundDuration}}</label> </div>
-        </div>
-    </div>
-    
 </div>

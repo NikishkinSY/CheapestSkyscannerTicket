@@ -3,15 +3,28 @@
     width: 1000px;
 }
 
-.container{
+.filter-container{
     display: flex;
-    padding: 50px 0;
+    padding: 50px 10px;
 }
 
-.container div {
+.filter-container div{
     flex: 1;
 }
+.route-price{
+    margin:10px;
+    font-size:large;
+}
+.route-container{
+    display: flex;
+}
+.route-item {
+    flex: 1;
+    margin:10px;
+    padding:10px;
+}
 
-.postFormErrorMessage{
+.post-form-error-message{
+    text-align:center;
     color: red;
 }

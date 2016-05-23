@@ -70,7 +70,7 @@ namespace CheapestSkyscannerTicket.Services
                     segment.DestinationPlace = poll.Places.FirstOrDefault(x => x.Id == segment.DestinationStation);
                 }
 
-                foreach (Leg leg in poll.Legs)
+                foreach (DTO.Poll.Leg leg in poll.Legs)
                 {
                     leg.DestinationPlace = poll.Places.FirstOrDefault(x => x.Id == leg.DestinationStation);
                     leg.OriginPlace = poll.Places.FirstOrDefault(x => x.Id == leg.OriginStation);
@@ -96,33 +96,33 @@ namespace CheapestSkyscannerTicket.Services
                     Itinerary itinerary = poll.Itineraries.First();
                     Ticket ticket = new Ticket();
                     ticket.Price = itinerary.PricingOptions.First().Price;
-
+                    
                     if (itinerary.InboundLeg != null)
-                    {
-                        ticket.InboundAirlines = string.Join(", ", itinerary.InboundLeg._Carriers.Select(x => x.Name).ToList());
-                        ticket.InboundDepartureDateTime = itinerary.InboundLeg.Departure;
-                        ticket.InboundArrivalDateTime = itinerary.InboundLeg.Arrival;
-                        ticket.InboundDestinationPlace = itinerary.InboundLeg.DestinationPlace.Name;
-                        ticket.InboundOriginPlace = itinerary.InboundLeg.OriginPlace.Name;
-                        ticket.InboundFlightNumbers = string.Join(", ", itinerary.InboundLeg.FlightNumbers.Select(x => x._FlightNumber).ToList());
-                        ticket.InboundDuration = itinerary.InboundLeg.Duration;
-                    }
-
+                        ticket.InboundLeg = Convert(itinerary.InboundLeg);
                     if (itinerary.OutboundLeg != null)
-                    {
-                        ticket.OutboundAirlines = string.Join(", ", itinerary.OutboundLeg._Carriers.Select(x => x.Name).ToList());
-                        ticket.OutboundDepartureDateTime = itinerary.OutboundLeg.Departure;
-                        ticket.OutboundArrivalDateTime = itinerary.OutboundLeg.Arrival;
-                        ticket.OutboundDestinationPlace = itinerary.OutboundLeg.DestinationPlace.Name;
-                        ticket.OutboundOriginPlace = itinerary.OutboundLeg.OriginPlace.Name;
-                        ticket.OutboundFlightNumbers = string.Join(", ", itinerary.OutboundLeg.FlightNumbers.Select(x => x._FlightNumber).ToList());
-                        ticket.OutboundDuration = itinerary.OutboundLeg.Duration;
-                    }
+                        ticket.OutboundLeg = Convert(itinerary.OutboundLeg);
 
                     return ticket;
                 }
             }
             return null;
+        }
+
+        private DTO.Leg Convert(DTO.Poll.Leg pollLeg)
+        {
+            DTO.Leg leg = new DTO.Leg();
+            leg.Airlines = string.Join(", ", pollLeg._Carriers.Select(x => x.Name).ToList());
+
+            DateTime dtParced;
+            if (DateTime.TryParse(pollLeg.Departure, out dtParced))
+                leg.Departure = dtParced;
+            if (DateTime.TryParse(pollLeg.Arrival, out dtParced))
+                leg.Arrival = dtParced;
+            leg.DestinationPlace = pollLeg.DestinationPlace.Name;
+            leg.OriginPlace = pollLeg.OriginPlace.Name;
+            leg.FlightNumbers = string.Join(", ", pollLeg.FlightNumbers.Select(x => x._FlightNumber).ToList());
+            leg.Duration = pollLeg.Duration;
+            return leg;
         }
 
         /// <summary>

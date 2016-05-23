@@ -3,9 +3,9 @@
 
     angular.module('app', [
         // Angular modules 
+        'ngMaterial',
         'angucomplete-alt',
         'ngMessages',
-        'angular-datepicker',
         // Custom modules 
         'app.skyscanner',
         'app.tickets'
