@@ -61,5 +61,9 @@
                 })
                 .catch(console.log.bind(console));
         }
+
+        //sorry for this! I have not time to solve this, asp.net core web api 2.2 works after 3 time request
+        var first = skyscannerApi.GetPlaces("1", null);
+        var second = skyscannerApi.GetPlaces("2", null);
     }
 })();

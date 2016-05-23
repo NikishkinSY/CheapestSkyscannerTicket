@@ -16,6 +16,13 @@ namespace CheapestSkyscannerTicket.Controllers
         }
 
         [HttpGet]
+        [Route("test")]
+        public string Test()
+        {
+            return "yes";
+        }
+
+        [HttpGet]
         [Route("places/{query}")]
         public IEnumerable<Services.DTO.Places.Place> GetPlaces(string query)
         {
